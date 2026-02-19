@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSF Together · Investment & Consulting for Digital Ventures</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f4f2ed;--bg2:#eae7e0;--card:#fff;--text:#2d2d2d;--mid:#5a5a5a;--light:#9a9a9a;--cream:#faf9f6;
+  --slate:#3a3a4a;--border:rgba(0,0,0,.06);--bdark:rgba(255,255,255,.08);
+  --mint:#00d693;--coral:#ff6b6b;--blue:#4d7cfe;--violet:#8b5cf6;--amber:#f59e0b;--sky:#38bdf8;--rose:#f472b6;--teal:#14b8a6;
+  --font:'Plus Jakarta Sans',-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+/* Animations */
+.rv{opacity:0;transform:translateY(50px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+.rv.vis{opacity:1;transform:translateY(0)}
+.rv-d1{transition-delay:.12s}.rv-d2{transition-delay:.24s}.rv-d3{transition-delay:.36s}.rv-d4{transition-delay:.48s}.rv-d5{transition-delay:.6s}
+.rv-sc{opacity:0;transform:scale(.9);transition:opacity .8s,transform .8s cubic-bezier(.16,1,.3,1)}
+.rv-sc.vis{opacity:1;transform:scale(1)}
+.rv-l{opacity:0;transform:translateX(-60px);transition:opacity .9s,transform .9s cubic-bezier(.16,1,.3,1)}.rv-l.vis{opacity:1;transform:translateX(0)}
+.rv-r{opacity:0;transform:translateX(60px);transition:opacity .9s,transform .9s cubic-bezier(.16,1,.3,1)}.rv-r.vis{opacity:1;transform:translateX(0)}
+.rv-rot{opacity:0;transform:rotate(-3deg) scale(.95);transition:opacity .8s,transform .8s cubic-bezier(.16,1,.3,1)}.rv-rot.vis{opacity:1;transform:rotate(0) scale(1)}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:100;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;background:rgba(244,242,237,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-weight:800;font-size:19px;letter-spacing:-.4px}.nav-logo span{font-weight:400;opacity:.4}
+.nav-r{display:flex;align-items:center;gap:32px}
+.nav-r a{font-size:14px;font-weight:500;color:var(--mid);transition:color .2s}.nav-r a:hover{color:var(--text)}
+.nav-btn{background:var(--violet);color:#fff;padding:11px 26px;border-radius:100px;font-weight:700;font-size:13px;transition:all .3s}
+.nav-btn:hover{background:var(--blue);transform:scale(1.04);box-shadow:0 8px 24px rgba(77,124,254,.2)}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:0 48px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;filter:brightness(.92) saturate(1.05)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(244,242,237,.92) 0%,rgba(244,242,237,.75) 50%,rgba(244,242,237,.4) 100%);z-index:1}
+.hero-content{position:relative;z-index:2;max-width:700px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.15);border-radius:100px;padding:8px 20px;font-size:12px;font-weight:700;color:var(--violet);margin-bottom:32px;text-transform:uppercase;letter-spacing:1.5px}
+.hero-badge .pulse{width:8px;height:8px;background:var(--violet);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.4)}50%{box-shadow:0 0 0 10px rgba(139,92,246,0)}}
+.hero h1{font-weight:800;font-size:clamp(38px,5vw,68px);line-height:1.06;letter-spacing:-2.5px}
+.hero h1 .grad{background:linear-gradient(135deg,var(--blue),var(--violet),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{margin-top:28px;font-size:17px;line-height:1.85;color:var(--mid);max-width:480px}
+.hero-ctas{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
+.btn-p{background:var(--violet);color:#fff;padding:16px 36px;border-radius:100px;font-weight:700;font-size:15px;transition:all .3s;border:none;cursor:pointer;display:inline-block}
+.btn-p:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 12px 32px rgba(77,124,254,.25)}
+.btn-s{background:var(--card);color:var(--text);padding:16px 36px;border-radius:100px;font-weight:600;font-size:15px;border:1.5px solid var(--border);transition:all .3s;cursor:pointer;display:inline-block}
+.btn-s:hover{border-color:var(--violet);color:var(--violet)}
+
+/* FLOATING LOGOS */
+.float-logos{position:absolute;right:48px;top:50%;transform:translateY(-50%);z-index:2;display:flex;flex-direction:column;gap:16px;opacity:.15}
+.float-logos div{width:80px;height:80px;background:var(--card);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 8px 32px rgba(0,0,0,.06);animation:floatUp 6s ease-in-out infinite}
+.float-logos div:nth-child(2){animation-delay:-2s}.float-logos div:nth-child(3){animation-delay:-4s}
+@keyframes floatUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* CLIENTS MARQUEE */
+.clients-marquee{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:28px 0;overflow:hidden}
+.cm-track{display:flex;gap:56px;animation:cmScroll 40s linear infinite;width:max-content}
+.cm-item{font-weight:700;font-size:18px;opacity:.15;white-space:nowrap;letter-spacing:-.3px;transition:opacity .3s}
+.cm-item:hover{opacity:.5}
+@keyframes cmScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* SECTION HELPERS */
+.sec{padding:120px 48px;max-width:1200px;margin:0 auto}
+.sec-wide{padding:120px 48px;max-width:100%}
+.sec-tag{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:var(--violet);margin-bottom:14px}
+.sec-title{font-weight:800;font-size:clamp(28px,3.5vw,46px);letter-spacing:-1.5px;line-height:1.1;max-width:620px;margin-bottom:16px}
+.sec-desc{font-size:16px;color:var(--mid);max-width:500px;line-height:1.8;margin-bottom:56px}
+
+/* CRM PRODUCT HERO */
+.crm-hero{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:120px 48px}
+.crm-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.crm-text .sec-tag{margin-bottom:14px}
+.crm-text h2{font-weight:800;font-size:clamp(28px,3vw,44px);letter-spacing:-1.5px;line-height:1.1;margin-bottom:20px}
+.crm-text p{font-size:15px;line-height:1.85;color:var(--mid);margin-bottom:20px}
+.crm-text p strong{color:var(--text);font-weight:600}
+.crm-features{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.crm-feat{display:flex;align-items:center;gap:8px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.1);border-radius:100px;padding:8px 18px;font-size:13px;font-weight:600;color:var(--violet)}
+.crm-feat span{font-size:16px}
+
+/* Dashboard mockup */
+.crm-visual{position:relative}
+.dash{background:var(--bg);border-radius:16px;padding:24px;border:1px solid var(--border);box-shadow:0 20px 60px rgba(0,0,0,.06);overflow:hidden}
+.dash-top{display:flex;gap:6px;margin-bottom:20px}.dash-dot{width:10px;height:10px;border-radius:50%;background:var(--border)}.dash-dot:first-child{background:var(--coral)}.dash-dot:nth-child(2){background:var(--amber)}.dash-dot:nth-child(3){background:var(--mint)}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dash-card{background:var(--card);border-radius:12px;padding:20px;border:1px solid var(--border)}
+.dash-label{font-size:11px;color:var(--light);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.dash-val{font-weight:800;font-size:28px;letter-spacing:-1px}
+.dc-mint{color:var(--mint)}.dc-blue{color:var(--blue)}.dc-violet{color:var(--violet)}.dc-coral{color:var(--coral)}
+.dash-bar{height:6px;border-radius:3px;background:var(--border);margin-top:10px;overflow:hidden;position:relative}
+.dash-bar-fill{height:100%;border-radius:3px;animation:barGrow 2s ease both}
+.dbf-1{background:linear-gradient(90deg,var(--mint),var(--sky));width:78%}
+.dbf-2{background:linear-gradient(90deg,var(--blue),var(--violet));width:65%;animation-delay:.2s}
+.dbf-3{background:linear-gradient(90deg,var(--violet),var(--rose));width:88%;animation-delay:.4s}
+.dbf-4{background:linear-gradient(90deg,var(--coral),var(--amber));width:52%;animation-delay:.6s}
+@keyframes barGrow{0%{width:0}100%{width:var(--w,70%)}}
+.dash-chart{grid-column:1/3;background:var(--card);border-radius:12px;padding:20px;border:1px solid var(--border);height:140px;position:relative;overflow:hidden}
+.dash-chart-label{font-size:11px;color:var(--light);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:90px}
+.chart-bar{flex:1;border-radius:4px 4px 0 0;animation:chartGrow 1.2s cubic-bezier(.16,1,.3,1) both}
+@keyframes chartGrow{0%{height:0}100%{height:var(--h)}}
+
+/* PHOTOS ROW */
+.photos{padding:0 48px;max-width:1200px;margin:0 auto}
+.photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.photo-card{border-radius:16px;overflow:hidden;position:relative;height:320px;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.photo-card:hover{transform:scale(.97)}
+.photo-card img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.photo-card:hover img{transform:scale(1.05)}
+.photo-over{position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(45,45,45,.6) 100%);display:flex;align-items:flex-end;padding:24px}
+.photo-label{color:#fff;font-weight:700;font-size:16px}
+
+/* STATS */
+.stats{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 48px}
+.stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:24px;text-align:center}
+.stat-n{font-weight:800;font-size:48px;letter-spacing:-2px}.stat-l{font-size:13px;color:var(--light);font-weight:500;margin-top:4px}
+.c1{color:var(--mint)}.c2{color:var(--blue)}.c3{color:var(--violet)}.c4{color:var(--coral)}.c5{color:var(--amber)}
+
+/* SERVICES */
+.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.srv{background:var(--card);border-radius:16px;padding:36px 28px;border:1px solid var(--border);transition:all .4s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden}
+.srv::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;opacity:0;transition:opacity .4s}
+.srv:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,.05);border-color:transparent}
+.srv:hover::before{opacity:1}
+.srv:nth-child(1)::before{background:linear-gradient(90deg,var(--blue),var(--violet))}
+.srv:nth-child(2)::before{background:linear-gradient(90deg,var(--mint),var(--sky))}
+.srv:nth-child(3)::before{background:linear-gradient(90deg,var(--violet),var(--rose))}
+.srv:nth-child(4)::before{background:linear-gradient(90deg,var(--coral),var(--amber))}
+.srv:nth-child(5)::before{background:linear-gradient(90deg,var(--amber),var(--mint))}
+.srv:nth-child(6)::before{background:linear-gradient(90deg,var(--sky),var(--violet))}
+.srv-i{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:20px}
+.si1{background:rgba(77,124,254,.08)}.si2{background:rgba(0,214,147,.08)}.si3{background:rgba(139,92,246,.08)}
+.si4{background:rgba(255,107,107,.08)}.si5{background:rgba(245,158,11,.08)}.si6{background:rgba(56,189,248,.08)}
+.srv-n{font-weight:700;font-size:17px;margin-bottom:8px;letter-spacing:-.3px}
+.srv-d{font-size:14px;line-height:1.7;color:var(--mid)}
+
+/* PARALLAX PHOTO BREAK */
+.parallax{height:400px;position:relative;overflow:hidden;margin:0}
+.parallax img{position:absolute;inset:-20%;width:120%;height:140%;object-fit:cover;will-change:transform}
+.parallax-over{position:absolute;inset:0;background:rgba(139,92,246,.15);display:flex;align-items:center;justify-content:center}
+.parallax-text{text-align:center;color:var(--text)}
+.parallax-text h2{font-weight:800;font-size:clamp(28px,3.5vw,48px);letter-spacing:-1.5px;margin-bottom:12px}
+.parallax-text p{font-size:16px;color:var(--mid)}
+
+/* CASES */
+.cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.case{background:var(--card);border-radius:16px;overflow:hidden;border:1px solid var(--border);transition:all .4s cubic-bezier(.16,1,.3,1)}
+.case:hover{transform:translateY(-5px);box-shadow:0 12px 36px rgba(0,0,0,.05)}
+.case-img{height:200px;overflow:hidden}
+.case-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.case:hover .case-img img{transform:scale(1.06)}
+.case-body{padding:28px}
+.case-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
+.ct1{color:var(--violet)}.ct2{color:var(--mint)}.ct3{color:var(--coral)}
+.case-title{font-weight:700;font-size:18px;letter-spacing:-.3px;margin-bottom:10px;line-height:1.3}
+.case-desc{font-size:14px;line-height:1.65;color:var(--mid)}
+
+/* PROCESS */
+.proc{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--card)}
+.proc-step{padding:44px 28px;border-right:1px solid var(--border);transition:background .3s}
+.proc-step:last-child{border-right:none}
+.proc-step:hover{background:var(--cream)}
+.ps-num{font-weight:800;font-size:12px;letter-spacing:2px;display:inline-block;padding:4px 12px;border-radius:100px;margin-bottom:18px}
+.pn1{background:rgba(77,124,254,.08);color:var(--blue)}.pn2{background:rgba(0,214,147,.08);color:var(--teal)}
+.pn3{background:rgba(139,92,246,.08);color:var(--violet)}.pn4{background:rgba(244,114,182,.08);color:var(--rose)}
+.ps-t{font-weight:700;font-size:19px;margin-bottom:10px;letter-spacing:-.3px}
+.ps-d{font-size:14px;line-height:1.65;color:var(--mid)}
+
+/* BRANDS */
+.brands{background:var(--bg2);padding:100px 48px;border-top:1px solid var(--border)}
+.brands-in{max-width:1200px;margin:0 auto}
+.brands-g{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.brand{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:36px 24px;text-align:center;transition:all .4s cubic-bezier(.16,1,.3,1)}
+.brand:hover{transform:translateY(-5px);box-shadow:0 12px 36px rgba(0,0,0,.05);border-color:transparent}
+.brand-e{font-size:40px;margin-bottom:14px;display:block}
+.brand-n{font-weight:700;font-size:17px;margin-bottom:4px}.brand-t{font-size:12px;color:var(--light)}
+.brand-u{display:inline-block;margin-top:10px;font-size:12px;color:var(--violet);font-weight:600;opacity:0;transition:opacity .3s}
+.brand:hover .brand-u{opacity:1}
+
+/* MAP */
+.map-sec{padding:100px 48px;max-width:1200px;margin:0 auto;text-align:center}
+.map-wrap{margin-top:48px;position:relative;max-width:900px;margin-left:auto;margin-right:auto}
+.map-svg{width:100%;opacity:.12}
+.map-pins{position:absolute;inset:0}
+.map-pin{position:absolute;width:14px;height:14px;border-radius:50%;animation:mapPulse 2s ease-in-out infinite}
+@keyframes mapPulse{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.5)}50%{box-shadow:0 0 0 16px rgba(139,92,246,0)}}
+.mp1{background:var(--violet);top:32%;left:48%;animation-delay:0s}
+.mp2{background:var(--blue);top:28%;left:52%;animation-delay:.5s}
+.mp3{background:var(--coral);top:38%;left:56%;animation-delay:1s}
+.mp4{background:var(--mint);top:48%;left:42%;animation-delay:1.5s}
+.mp5{background:var(--amber);top:55%;left:72%;animation-delay:2s}
+.pin-label{position:absolute;font-size:11px;font-weight:700;color:var(--text);white-space:nowrap}
+.pl1{top:26%;left:46%}.pl2{top:22%;left:53%}.pl3{top:33%;left:58%}.pl4{top:44%;left:36%}.pl5{top:50%;left:74%}
+
+/* TESTIMONIAL */
+.test{padding:120px 48px;max-width:900px;margin:0 auto;text-align:center}
+.test-q{font-size:clamp(22px,2.8vw,34px);font-weight:700;letter-spacing:-.8px;line-height:1.35;font-style:italic;margin-bottom:28px}
+.test-a{font-size:14px;color:var(--light)}.test-a strong{color:var(--text);font-weight:700}
+
+/* VISION */
+.vis-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.vis-card{border-radius:16px;padding:44px 32px;color:#fff;transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.vis-card:hover{transform:translateY(-5px)}
+.vc1{background:linear-gradient(145deg,var(--blue),var(--violet))}
+.vc2{background:linear-gradient(145deg,var(--mint),var(--sky))}
+.vc3{background:linear-gradient(145deg,var(--rose),var(--amber))}
+.vc-i{font-size:32px;margin-bottom:18px}.vc-t{font-weight:800;font-size:20px;margin-bottom:10px;letter-spacing:-.3px}.vc-d{font-size:14px;line-height:1.7;opacity:.85}
+.vc2 .vc-t,.vc2 .vc-d{color:var(--text)}
+
+/* CONTACT */
+.contact{background:var(--card);border-top:1px solid var(--border);padding:120px 48px}
+.contact-in{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px}
+.contact-left h2{font-weight:800;font-size:clamp(28px,3vw,42px);letter-spacing:-1.5px;line-height:1.1;margin-bottom:20px}
+.contact-left p{font-size:15px;color:var(--mid);line-height:1.8;margin-bottom:28px}
+.contact-info{display:flex;flex-direction:column;gap:16px}
+.ci{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--mid)}
+.ci span{font-size:20px}
+.form{display:flex;flex-direction:column;gap:16px}
+.form input,.form textarea{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 20px;font-family:var(--font);font-size:15px;color:var(--text);outline:none;transition:border-color .3s;resize:vertical}
+.form input:focus,.form textarea:focus{border-color:var(--violet)}
+.form textarea{min-height:120px}
+.form button{background:var(--violet);color:#fff;border:none;padding:16px 36px;border-radius:100px;font-weight:700;font-size:15px;font-family:var(--font);cursor:pointer;transition:all .3s;align-self:flex-start}
+.form button:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 12px 32px rgba(77,124,254,.25)}
+
+/* CTA */
+.cta{padding:100px 48px 140px;max-width:900px;margin:0 auto;text-align:center}
+.cta h2{font-weight:800;font-size:clamp(30px,4vw,52px);letter-spacing:-2px;margin-bottom:16px;line-height:1.05}
+.cta h2 .grad{background:linear-gradient(135deg,var(--blue),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.cta p{font-size:15px;color:var(--light);margin-bottom:36px}
+
+/* FOOTER */
+footer{background:var(--slate);color:#fff;padding:72px 48px 36px;border-radius:24px 24px 0 0}
+.f-in{max-width:1200px;margin:0 auto}
+.f-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:64px}
+.f-brand{font-weight:800;font-size:18px;margin-bottom:16px}
+.f-bdesc{font-size:13px;line-height:1.7;opacity:.35;max-width:280px}
+.f-ct{font-size:11px;text-transform:uppercase;letter-spacing:2px;opacity:.2;font-weight:600;margin-bottom:20px}
+.f-col a{display:block;font-size:14px;opacity:.45;margin-bottom:12px;transition:opacity .2s}.f-col a:hover{opacity:.9}
+.f-line{border-top:1px solid var(--bdark);padding-top:24px;display:flex;justify-content:space-between;font-size:12px;opacity:.18}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:16px 24px}.nav-r a:not(.nav-btn){display:none}
+  .hero{padding:0 24px;min-height:auto;padding-top:120px;padding-bottom:80px}
+  .float-logos{display:none}
+  .sec,.crm-hero,.stats,.brands,.contact,.map-sec,.test,.cta{padding-left:24px;padding-right:24px}
+  .crm-inner{grid-template-columns:1fr;gap:40px}
+  .photos-grid{grid-template-columns:1fr}
+  .stats-inner{grid-template-columns:repeat(3,1fr)}
+  .srv-grid{grid-template-columns:1fr}
+  .proc{grid-template-columns:1fr 1fr}
+  .proc-step{border-right:none;border-bottom:1px solid var(--border)}
+  .cases-grid{grid-template-columns:1fr}
+  .brands-g{grid-template-columns:1fr 1fr}
+  .vis-grid{grid-template-columns:1fr}
+  .contact-in{grid-template-columns:1fr}
+  .f-grid{grid-template-columns:1fr 1fr}
+  .parallax{height:280px}
+}
+@media(max-width:500px){
+  .stats-inner{grid-template-columns:1fr 1fr}
+  .proc{grid-template-columns:1fr}
+  .brands-g{grid-template-columns:1fr}
+  .f-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">NSF Together <span>Investment.</span></a>
+  <div class="nav-r">
+    <a href="#services">Services</a>
+    <a href="#cases">Cases</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="nav-btn">Contact us</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80" alt="Modern office"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge rv"><div class="pulse"></div>Now investing in MENA & Europe</div>
+    <h1 class="rv rv-d1">We build, scale & invest in <span class="grad">digital ventures.</span></h1>
+    <p class="hero-sub rv rv-d2">Strategic CRM, tech infrastructure, and capital for ambitious operators across iGaming, Fintech, Cosmetics, and Real Estate.</p>
+    <div class="hero-ctas rv rv-d3">
+      <a href="#contact" class="btn-p">Start a conversation</a>
+      <a href="#services" class="btn-s">Explore our work →</a>
+    </div>
+  </div>
+  <div class="float-logos">
+    <div>🎰</div><div>🏦</div><div>✨</div>
+  </div>
+</section>
+
+<!-- CLIENTS MARQUEE -->
+<div class="clients-marquee">
+  <div class="cm-track">
+    <span class="cm-item">OddScanner</span><span class="cm-item">Bugsy</span><span class="cm-item">Alea</span><span class="cm-item">Wunderino</span><span class="cm-item">Betsson</span><span class="cm-item">Alunafi</span><span class="cm-item">AIACurls</span><span class="cm-item">Swivel</span>
+    <span class="cm-item">OddScanner</span><span class="cm-item">Bugsy</span><span class="cm-item">Alea</span><span class="cm-item">Wunderino</span><span class="cm-item">Betsson</span><span class="cm-item">Alunafi</span><span class="cm-item">AIACurls</span><span class="cm-item">Swivel</span>
+  </div>
+</div>
+
+<!-- CRM PRODUCT SECTION -->
+<section class="crm-hero" id="crm">
+  <div class="crm-inner">
+    <div class="crm-text rv-l">
+      <div class="sec-tag">Our Core Product</div>
+      <h2>CRM Architecture & Marketing Automation That Scales.</h2>
+      <p><strong>Data and tracking is key.</strong> We set up your MarTech stack first — before any scaling. With a full-funnel optimization strategy, we focus on <strong>direct acquisition, user onboarding, offer optimization, and retention.</strong></p>
+      <p>From HubSpot to Salesforce to Braze, we build the CRM engine that turns visitors into loyal customers and maximize lifetime value.</p>
+      <div class="crm-features">
+        <div class="crm-feat"><span>📊</span> Lead Scoring</div>
+        <div class="crm-feat"><span>🔄</span> Lifecycle Automation</div>
+        <div class="crm-feat"><span>🎯</span> Segmentation</div>
+        <div class="crm-feat"><span>📧</span> Email Flows</div>
+        <div class="crm-feat"><span>📈</span> Attribution</div>
+        <div class="crm-feat"><span>⚡</span> Real-time Triggers</div>
+      </div>
+    </div>
+    <div class="crm-visual rv-r">
+      <div class="dash">
+        <div class="dash-top"><div class="dash-dot"></div><div class="dash-dot"></div><div class="dash-dot"></div></div>
+        <div class="dash-grid">
+          <div class="dash-card">
+            <div class="dash-label">Conversion Rate</div>
+            <div class="dash-val dc-mint">24.8%</div>
+            <div class="dash-bar"><div class="dash-bar-fill dbf-1" style="--w:78%"></div></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-label">Active Users</div>
+            <div class="dash-val dc-blue">12.4K</div>
+            <div class="dash-bar"><div class="dash-bar-fill dbf-2" style="--w:65%"></div></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-label">Retention</div>
+            <div class="dash-val dc-violet">89%</div>
+            <div class="dash-bar"><div class="dash-bar-fill dbf-3" style="--w:88%"></div></div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-label">LTV / CAC</div>
+            <div class="dash-val dc-coral">3.2x</div>
+            <div class="dash-bar"><div class="dash-bar-fill dbf-4" style="--w:52%"></div></div>
+          </div>
+          <div class="dash-chart">
+            <div class="dash-chart-label">Monthly Revenue Growth</div>
+            <div class="chart-bars">
+              <div class="chart-bar" style="--h:40%;background:rgba(77,124,254,.3)"></div>
+              <div class="chart-bar" style="--h:55%;background:rgba(77,124,254,.4);animation-delay:.1s"></div>
+              <div class="chart-bar" style="--h:45%;background:rgba(77,124,254,.35);animation-delay:.2s"></div>
+              <div class="chart-bar" style="--h:70%;background:rgba(139,92,246,.4);animation-delay:.3s"></div>
+              <div class="chart-bar" style="--h:60%;background:rgba(139,92,246,.45);animation-delay:.4s"></div>
+              <div class="chart-bar" style="--h:75%;background:rgba(139,92,246,.5);animation-delay:.5s"></div>
+              <div class="chart-bar" style="--h:65%;background:var(--violet);animation-delay:.6s;opacity:.6"></div>
+              <div class="chart-bar" style="--h:85%;background:var(--violet);animation-delay:.7s;opacity:.7"></div>
+              <div class="chart-bar" style="--h:78%;background:var(--violet);animation-delay:.8s;opacity:.8"></div>
+              <div class="chart-bar" style="--h:92%;background:var(--violet);animation-delay:.9s;opacity:.9"></div>
+              <div class="chart-bar" style="--h:88%;background:var(--violet);animation-delay:1s"></div>
+              <div class="chart-bar" style="--h:95%;background:linear-gradient(180deg,var(--blue),var(--violet));animation-delay:1.1s"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO ROW -->
+<section class="photos" style="padding-top:80px;padding-bottom:80px">
+  <div class="photos-grid">
+    <div class="photo-card rv-sc">
+      <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&q=80" alt="Team meeting">
+      <div class="photo-over"><div class="photo-label">Strategy & Planning</div></div>
+    </div>
+    <div class="photo-card rv-sc rv-d2">
+      <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80" alt="Analytics dashboard">
+      <div class="photo-over"><div class="photo-label">Data-Driven Decisions</div></div>
+    </div>
+    <div class="photo-card rv-sc rv-d4">
+      <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=80" alt="Dev team coding">
+      <div class="photo-over"><div class="photo-label">Tech Implementation</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat-item rv rv-d1"><div class="stat-n c1" data-target="5">0</div><div class="stat-l">Industry Verticals</div></div>
+    <div class="stat-item rv rv-d2"><div class="stat-n c2" data-target="12">0</div><div class="stat-l">Ventures Launched</div></div>
+    <div class="stat-item rv rv-d3"><div class="stat-n c3" data-target="6">0</div><div class="stat-l">Countries Active</div></div>
+    <div class="stat-item rv rv-d4"><div class="stat-n c4" data-target="30">0</div><div class="stat-l">CRM Implementations</div></div>
+    <div class="stat-item rv rv-d5"><div class="stat-n c5" data-target="8">0</div><div class="stat-l">Brands Created</div></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="sec" id="services">
+  <div class="sec-tag rv">Our Services</div>
+  <h2 class="sec-title rv rv-d1">Everything your venture needs to launch and scale.</h2>
+  <p class="sec-desc rv rv-d2">We don't just advise — we build, operate, and invest alongside you.</p>
+  <div class="srv-grid">
+    <div class="srv rv rv-d1"><div class="srv-i si1">📐</div><div class="srv-n">Build & Launch</div><div class="srv-d">From business plan to live product. Tech stack, team structure, go-to-market strategy, and first revenue.</div></div>
+    <div class="srv rv rv-d2"><div class="srv-i si2">🤝</div><div class="srv-n">Bring Together</div><div class="srv-d">Strategic partnerships, talent matching, and ecosystem connections that unlock growth.</div></div>
+    <div class="srv rv rv-d3"><div class="srv-i si3">💰</div><div class="srv-n">Smart Investing</div><div class="srv-d">Capital deployment with hands-on support. We invest where we add real operational value.</div></div>
+    <div class="srv rv rv-d1"><div class="srv-i si4">🔧</div><div class="srv-n">Fix & Restart</div><div class="srv-d">Turnaround for ventures that need a reset. New CRM, new funnel, new acquisition, new growth.</div></div>
+    <div class="srv rv rv-d2"><div class="srv-i si5">⚡</div><div class="srv-n">CRM & Automation</div><div class="srv-d">HubSpot, Salesforce, Braze. Full lifecycle optimisation, segmentation, automated campaigns.</div></div>
+    <div class="srv rv rv-d3"><div class="srv-i si6">📊</div><div class="srv-n">Growth Strategy</div><div class="srv-d">P&L review, acquisition funnels, conversion engineering, performance marketing at scale.</div></div>
+  </div>
+</section>
+
+<!-- PARALLAX BREAK -->
+<div class="parallax" id="parallax1">
+  <img src="https://images.unsplash.com/photo-1497215842964-222b430dc094?w=1600&q=80" alt="Team workspace" class="parallax-img">
+  <div class="parallax-over">
+    <div class="parallax-text">
+      <h2>From zero to scale, fast.</h2>
+      <p>Our playbook takes ventures from idea to revenue in months — not years.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<section class="sec">
+  <div class="sec-tag rv">How We Work</div>
+  <h2 class="sec-title rv rv-d1">Structured for speed.</h2>
+  <p class="sec-desc rv rv-d2">Our engagement model delivers results fast.</p>
+  <div class="proc rv-sc">
+    <div class="proc-step"><div class="ps-num pn1">STEP 01</div><div class="ps-t">Discovery</div><div class="ps-d">We audit your setup, P&L, and growth blockers in a focused deep-dive.</div></div>
+    <div class="proc-step"><div class="ps-num pn2">STEP 02</div><div class="ps-t">Strategy</div><div class="ps-d">Custom roadmap — platform, CRM, and acquisition plan built for you.</div></div>
+    <div class="proc-step"><div class="ps-num pn3">STEP 03</div><div class="ps-t">Execution</div><div class="ps-d">We implement, configure, and launch — embedded with your team.</div></div>
+    <div class="proc-step"><div class="ps-num pn4">STEP 04</div><div class="ps-t">Scale</div><div class="ps-d">Ongoing optimisation, reporting, and strategic support as you grow.</div></div>
+  </div>
+</section>
+
+<!-- CASES -->
+<section class="sec" id="cases">
+  <div class="sec-tag rv">Case Studies</div>
+  <h2 class="sec-title rv rv-d1">Real results, real operators.</h2>
+  <p class="sec-desc rv rv-d2">A few examples of how we've helped ventures grow.</p>
+  <div class="cases-grid">
+    <div class="case rv rv-d1">
+      <div class="case-img"><img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80" alt="Trading dashboard"></div>
+      <div class="case-body">
+        <div class="case-tag ct1">iGaming · CRM</div>
+        <div class="case-title">Rebuilding CRM for a European Casino Operator</div>
+        <div class="case-desc">Full CRM migration to Braze with automated player lifecycle — tripled conversion rate in 4 months.</div>
+      </div>
+    </div>
+    <div class="case rv rv-d2">
+      <div class="case-img"><img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&q=80" alt="Payment app"></div>
+      <div class="case-body">
+        <div class="case-tag ct2">Fintech · Launch</div>
+        <div class="case-title">Neobank Launch in MENA Region</div>
+        <div class="case-desc">From licensing to first 10K users in 6 months. KYC, payment rails, and acquisition funnels built from scratch.</div>
+      </div>
+    </div>
+    <div class="case rv rv-d3">
+      <div class="case-img"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80" alt="Cosmetics"></div>
+      <div class="case-body">
+        <div class="case-tag ct3">Cosmetics · D2C</div>
+        <div class="case-title">D2C Beauty Brand — Full Funnel Build</div>
+        <div class="case-desc">Influencer strategy, Shopify build, email automation, and subscription model that hit €500K in year one.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRANDS -->
+<section class="brands">
+  <div class="brands-in">
+    <div class="sec-tag rv">Our Brands</div>
+    <h2 class="sec-title rv rv-d1" style="margin-bottom:56px">Ventures we've built, invested in, or operate.</h2>
+    <div class="brands-g">
+      <div class="brand rv rv-d1"><span class="brand-e">🎰</span><div class="brand-n">OddScanner</div><div class="brand-t">iGaming · Odds Comparison</div><div class="brand-u">oddscanner.com →</div></div>
+      <div class="brand rv rv-d2"><span class="brand-e">💳</span><div class="brand-n">Alunafi</div><div class="brand-t">Fintech · Digital Banking</div><div class="brand-u">alunafi.com →</div></div>
+      <div class="brand rv rv-d3"><span class="brand-e">💆‍♀️</span><div class="brand-n">AIACurls</div><div class="brand-t">Beauty · D2C Cosmetics</div><div class="brand-u">aiacurls.com →</div></div>
+      <div class="brand rv rv-d4"><span class="brand-e">🏆</span><div class="brand-n">Betsson</div><div class="brand-t">iGaming · Sports Betting</div><div class="brand-u">betsson.com →</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PARALLAX 2 -->
+<div class="parallax" id="parallax2">
+  <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&q=80" alt="Team collaboration" class="parallax-img">
+  <div class="parallax-over" style="background:rgba(77,124,254,.12)">
+    <div class="parallax-text">
+      <h2>We don't just advise. We build.</h2>
+      <p>Embedded with your team, skin in the game.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="sec" id="about">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px">
+    <div class="rv-l">
+      <div class="sec-tag">About NSF Together</div>
+      <h2 class="sec-title">A hands-on investment firm for ambitious digital operators.</h2>
+    </div>
+    <div class="rv-r">
+      <p style="font-size:15px;line-height:1.9;color:var(--mid);margin-bottom:20px"><strong style="color:var(--text)">NSF Together Investment</strong> partners with founders and operators across high-growth sectors. From iGaming to Fintech to Cosmetics — we bring operational experience in CRM architecture, marketing automation, platform selection, and go-to-market execution.</p>
+      <p style="font-size:15px;line-height:1.9;color:var(--mid);margin-bottom:20px">Our approach: <strong style="color:var(--text)">discover, strategise, execute, scale.</strong> We bring the playbook, the tools, and the capital to accelerate your growth.</p>
+      <p style="font-size:15px;line-height:1.9;color:var(--mid)">Based in <strong style="color:var(--text)">Nicosia, Cyprus</strong> — operating globally across Europe, UAE, and LATAM.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="test">
+  <div class="rv">
+    <div class="test-q">"NSF Together embedded with our team, rebuilt our CRM from scratch, and tripled our conversion rate in four months. They don't just advise — they execute."</div>
+    <div class="test-a"><strong>Gaming Operator</strong> · Europe</div>
+  </div>
+</section>
+
+<!-- VISION -->
+<section class="sec" style="padding-top:0">
+  <div class="sec-tag rv">Our Vision</div>
+  <h2 class="sec-title rv rv-d1" style="margin-bottom:48px">What drives us forward.</h2>
+  <div class="vis-grid">
+    <div class="vis-card vc1 rv rv-d1"><div class="vc-i">🎯</div><div class="vc-t">Execution Over Theory</div><div class="vc-d">We don't write reports that collect dust. We build, launch, and optimise — with skin in the game.</div></div>
+    <div class="vis-card vc2 rv rv-d2"><div class="vc-i">🌍</div><div class="vc-t">Global, Local Expertise</div><div class="vc-d">Based in Cyprus, operating across Europe, UAE, and LATAM. We know the regulations, markets, and players.</div></div>
+    <div class="vis-card vc3 rv rv-d3"><div class="vc-i">🚀</div><div class="vc-t">Zero to Scale, Fast</div><div class="vc-d">Our playbook takes ventures from idea to revenue in months — not years.</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-in">
+    <div class="contact-left rv-l">
+      <div class="sec-tag">Get in Touch</div>
+      <h2>Let's start working together.</h2>
+      <p>Drop us a line to discuss your needs. Whether you're launching, scaling, or fixing — we'd love to hear about your vision.</p>
+      <div class="contact-info">
+        <div class="ci"><span>📍</span> Aigyptou 12, Nicosia 1097, Cyprus</div>
+        <div class="ci"><span>📧</span> hello@nsftogether.com</div>
+        <div class="ci"><span>🔗</span> LinkedIn</div>
+      </div>
+    </div>
+    <div class="rv-r">
+      <div class="form">
+        <input type="text" placeholder="Your name *" required>
+        <input type="email" placeholder="Your email *" required>
+        <input type="text" placeholder="Company name">
+        <textarea placeholder="Tell us about your project *"></textarea>
+        <button type="submit">Send message →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2 class="rv">Ready to build something <span class="grad">extraordinary?</span></h2>
+  <p class="rv rv-d1">hello@nsftogether.com</p>
+  <a href="mailto:hello@nsftogether.com" class="btn-p rv rv-d2">Start a conversation →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-in">
+    <div class="f-grid">
+      <div>
+        <div class="f-brand">NSF Together Investment.</div>
+        <p class="f-bdesc">Business growth through customised solutions. We build, scale, and invest in digital ventures across iGaming, Fintech, Cosmetics, and Real Estate.</p>
+      </div>
+      <div><div class="f-ct">Work</div><div class="f-col"><a href="#">iGaming</a><a href="#">Fintech</a><a href="#">Cosmetics</a><a href="#">Real Estate</a><a href="#">CRM</a></div></div>
+      <div><div class="f-ct">Services</div><div class="f-col"><a href="#">Build & Launch</a><a href="#">Bring Together</a><a href="#">Smart Investing</a><a href="#">Fix & Restart</a></div></div>
+      <div><div class="f-ct">Connect</div><div class="f-col"><a href="mailto:hello@nsftogether.com">hello@nsftogether.com</a><a href="#">LinkedIn</a><a href="#">Nicosia, Cyprus</a></div></div>
+    </div>
+    <div class="f-line"><span>© 2026 NSF Together Investment Ltd.</span><span>Aigyptou 12, Nicosia 1097, Cyprus</span></div>
+  </div>
+</footer>
+
+<script>
+/* Scroll reveal */
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('vis')})},{threshold:.06,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.rv,.rv-sc,.rv-l,.rv-r,.rv-rot').forEach(el=>obs.observe(el));
+
+/* Counter animation */
+const cObs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){const t=+el.target.dataset.target;const s=el.target.textContent.includes('+')?'+':'';let c=0;const dur=1500;const step=Math.max(1,Math.floor(t/60));const iv=setInterval(()=>{c+=step;if(c>=t){c=t;clearInterval(iv)}el.target.textContent=c+s},dur/60);cObs.unobserve(el.target)}})},{threshold:.5});
+document.querySelectorAll('[data-target]').forEach(el=>cObs.observe(el));
+
+/* Parallax */
+window.addEventListener('scroll',()=>{document.querySelectorAll('.parallax-img').forEach(img=>{const rect=img.parentElement.getBoundingClientRect();const speed=.3;const y=(rect.top*speed);img.style.transform=`translateY(${y}px)`})});
+</script>
+</body>
+</html>
